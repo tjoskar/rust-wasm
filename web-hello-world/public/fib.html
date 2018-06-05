@@ -53,7 +53,10 @@
       }
     }
 
-    WebAssembly.instantiateStreaming(fetch('web_hello_world.gc.wasm'))
+    // Safari do not support WebAssembly.instantiateStreaming
+    fetch('web_hello_world.gc.wasm')
+      .then(r => r.arrayBuffer())
+      .then(r => WebAssembly.instantiate(r))
       .then(wasmModule => {
         claculateButton.addEventListener('click', calculate(wasmModule.instance.exports.fib), false);
       });

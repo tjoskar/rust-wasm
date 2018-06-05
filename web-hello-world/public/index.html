@@ -10,17 +10,17 @@
   <a href="/fib.html">Fib</a>
 
   <script>
-    WebAssembly.instantiateStreaming(fetch('web_hello_world.gc.wasm'))
-      // fetch('web_hello_world.gc.wasm')
-      // .then(r => r.arrayBuffer())
-      // .then(r => WebAssembly.instantiate(r))
+    // WebAssembly.instantiateStreaming does not work in safari
+    fetch('web_hello_world.gc.wasm')
+      .then(r => r.arrayBuffer())
+      .then(r => WebAssembly.instantiate(r))
       .then(wasmModule => wasmModule.instance.exports.add_one)
       .then(addOne => {
         const t0 = performance.now();
         const result = addOne(2)
         const t1 = performance.now();
         console.log(`2 + 1 = ${result}`, t1 - t0);
-      });
+      })
   </script>
 </body>
 
