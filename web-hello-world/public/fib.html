@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+</head>
+
+<body>
+  <a href="/index.html">Index</a>
+  <input type="text" id="fib-input">
+  <button id="fib-calculate">Calculate</button>
+  <p id="result">0</p>
+  <p>Rust time:
+    <span id="rust-time">0</span>ms
+  </p>
+  <p>js time:
+    <span id="js-time">0</span>ms
+  </p>
+  <img src="https://media.giphy.com/media/ryQDjtPSPfgeA/giphy.gif" />
+
+  <script>
+    const claculateButton = document.getElementById('fib-calculate')
+    const fibInput = document.getElementById('fib-input')
+    const resultHolder = document.getElementById('result')
+    const jsTimeHolder = document.getElementById('js-time')
+    const rustTimeHolder = document.getElementById('rust-time')
+
+    function jsFib(n) {
+      if (n < 3) {
+        return 1;
+      }
+      return jsFib(n - 1) + jsFib(n - 2);
+    }
+
+    function calculate(rustFib) {
+      return () => {
+        const input = fibInput.value | 0
+        console.log('Start rust calculation', input)
+        const rustStart = performance.now();
+        const rustResult = rustFib(input)
+        const rustEnd = performance.now();
+        resultHolder.textContent = rustResult
+        rustTimeHolder.textContent = String(rustEnd - rustStart)
+
+        console.log('Start js calculation', input)
+        const jsStart = performance.now();
+        const jsResult = jsFib(input)
+        const jsEnd = performance.now();
+        jsTimeHolder.textContent = String(jsEnd - jsStart)
+        console.log('Done and done!')
+        console.log(rustResult, jsResult)
+      }
+    }
+
+    WebAssembly.instantiateStreaming(fetch('web_hello_world.gc.wasm'))
+      .then(wasmModule => {
+        claculateButton.addEventListener('click', calculate(wasmModule.instance.exports.fib), false);
+      });
+  </script>
+</body>
+
+</html>
