@@ -2,7 +2,7 @@
 
 ### Setup
 
-Follow this guide: https://rust-lang-nursery.github.io/rust-wasm/setup.html
+Follow this guide: https://rustwasm.github.io/book/setup.html
 
 ### Terminal
 
